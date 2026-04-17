@@ -1,16 +1,17 @@
 import type { Page } from '@playwright/test';
 
-const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD;
-
-if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
-  throw new Error('E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD must be set to run E2E tests.');
+function requireEnv(name: string): string {
+  const v = process.env[name];
+  if (!v) throw new Error(`${name} must be set to run E2E tests.`);
+  return v;
 }
 
 export async function loginAsAdmin(page: Page) {
+  const email = requireEnv('E2E_ADMIN_EMAIL');
+  const password = requireEnv('E2E_ADMIN_PASSWORD');
   await page.goto('/admin/login');
-  await page.getByLabel(/אימייל|email/i).fill(ADMIN_EMAIL);
-  await page.getByLabel(/סיסמה|password/i).fill(ADMIN_PASSWORD);
+  await page.getByLabel(/אימייל|email/i).fill(email);
+  await page.getByLabel(/סיסמה|password/i).fill(password);
   await page.getByRole('button', { name: /התחברות|sign in/i }).click();
   await page.waitForURL('**/admin');
 }
