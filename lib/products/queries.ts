@@ -38,6 +38,19 @@ export async function getProduct(id: string): Promise<ProductRow> {
   return data as ProductRow;
 }
 
+export async function listAvailableProducts(): Promise<ProductRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, name, price, description, image_urls, is_available, display_order, created_at')
+    .eq('is_available', true)
+    .order('display_order', { ascending: true })
+    .order('created_at', { ascending: true });
+
+  if (error) throw error;
+  return (data ?? []) as ProductRow[];
+}
+
 export async function nextDisplayOrder(): Promise<number> {
   const supabase = await createClient();
   const { data, error } = await supabase
