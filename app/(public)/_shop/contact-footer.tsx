@@ -36,7 +36,16 @@ export function ContactFooter() {
         {EMAIL ? <span aria-hidden="true">·</span> : null}
         <span>איסוף עצמי ביבנה</span>
       </div>
-      <p className="pb-6 text-center text-xs text-muted">© Salsala</p>
+      <p className="flex items-center justify-center gap-3 pb-6 text-center text-xs text-muted">
+        <span>© Salsala</span>
+        <span aria-hidden="true">·</span>
+        <a
+          href="/admin/login"
+          className="underline-offset-4 transition hover:text-foreground hover:underline"
+        >
+          ניהול
+        </a>
+      </p>
     </footer>
   );
 }
