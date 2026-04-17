@@ -17,42 +17,54 @@ import {
   type BasketState,
 } from './types';
 
+type InternalState = {
+  basket: BasketState;
+  hydrated: boolean;
+};
+
+const INITIAL_INTERNAL: InternalState = {
+  basket: EMPTY_BASKET,
+  hydrated: false,
+};
+
 type Action =
-  | { type: 'HYDRATE'; state: BasketState }
+  | { type: 'HYDRATE'; basket: BasketState }
   | { type: 'ADD_ITEM'; item: Omit<BasketItem, 'quantity'> }
   | { type: 'SET_QUANTITY'; id: string; quantity: number }
   | { type: 'REMOVE_ITEM'; id: string }
   | { type: 'CLEAR' };
 
-function reducer(state: BasketState, action: Action): BasketState {
+function reducer(state: InternalState, action: Action): InternalState {
   switch (action.type) {
     case 'HYDRATE':
-      return action.state;
+      return { basket: action.basket, hydrated: true };
     case 'ADD_ITEM': {
-      const existing = state.items.find((i) => i.id === action.item.id);
-      if (existing) {
-        return {
-          items: state.items.map((i) =>
+      const items = state.basket.items;
+      const existing = items.find((i) => i.id === action.item.id);
+      const nextItems = existing
+        ? items.map((i) =>
             i.id === existing.id ? { ...i, quantity: i.quantity + 1 } : i,
-          ),
-        };
-      }
-      return { items: [...state.items, { ...action.item, quantity: 1 }] };
+          )
+        : [...items, { ...action.item, quantity: 1 }];
+      return { ...state, basket: { items: nextItems } };
     }
     case 'SET_QUANTITY': {
-      if (action.quantity <= 0) {
-        return { items: state.items.filter((i) => i.id !== action.id) };
-      }
-      return {
-        items: state.items.map((i) =>
-          i.id === action.id ? { ...i, quantity: action.quantity } : i,
-        ),
-      };
+      const items = state.basket.items;
+      const nextItems =
+        action.quantity <= 0
+          ? items.filter((i) => i.id !== action.id)
+          : items.map((i) =>
+              i.id === action.id ? { ...i, quantity: action.quantity } : i,
+            );
+      return { ...state, basket: { items: nextItems } };
     }
     case 'REMOVE_ITEM':
-      return { items: state.items.filter((i) => i.id !== action.id) };
+      return {
+        ...state,
+        basket: { items: state.basket.items.filter((i) => i.id !== action.id) },
+      };
     case 'CLEAR':
-      return EMPTY_BASKET;
+      return { ...state, basket: EMPTY_BASKET };
     default:
       return state;
   }
@@ -74,33 +86,34 @@ type BasketContextValue = {
 const BasketContext = createContext<BasketContextValue | null>(null);
 
 export function BasketProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, EMPTY_BASKET);
-  const [hydrated, setHydrated] = useState(false);
+  const [internal, dispatch] = useReducer(reducer, INITIAL_INTERNAL);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
+    let parsed: BasketState = EMPTY_BASKET;
     try {
       const raw = window.localStorage.getItem(BASKET_STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as BasketState;
-        if (parsed && Array.isArray(parsed.items)) {
-          dispatch({ type: 'HYDRATE', state: parsed });
-        }
+        const maybe = JSON.parse(raw) as BasketState;
+        if (maybe && Array.isArray(maybe.items)) parsed = maybe;
       }
     } catch {
-      // Corrupt or unavailable — start empty.
+      // Corrupt or unavailable — fall through with empty basket.
     }
-    setHydrated(true);
+    dispatch({ type: 'HYDRATE', basket: parsed });
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!internal.hydrated) return;
     try {
-      window.localStorage.setItem(BASKET_STORAGE_KEY, JSON.stringify(state));
+      window.localStorage.setItem(
+        BASKET_STORAGE_KEY,
+        JSON.stringify(internal.basket),
+      );
     } catch {
-      // Quota exceeded or disabled — in-memory fallback, no user-facing error.
+      // Quota exceeded or disabled — in-memory fallback.
     }
-  }, [state, hydrated]);
+  }, [internal.basket, internal.hydrated]);
 
   const addItem = useCallback(
     (item: Omit<BasketItem, 'quantity'>) => dispatch({ type: 'ADD_ITEM', item }),
@@ -118,14 +131,14 @@ export function BasketProvider({ children }: { children: ReactNode }) {
   const clear = useCallback(() => dispatch({ type: 'CLEAR' }), []);
 
   const itemCount = useMemo(
-    () => state.items.reduce((n, i) => n + i.quantity, 0),
-    [state.items],
+    () => internal.basket.items.reduce((n, i) => n + i.quantity, 0),
+    [internal.basket.items],
   );
 
   const value = useMemo<BasketContextValue>(
     () => ({
-      state,
-      hydrated,
+      state: internal.basket,
+      hydrated: internal.hydrated,
       itemCount,
       addItem,
       setQuantity,
@@ -135,7 +148,16 @@ export function BasketProvider({ children }: { children: ReactNode }) {
       openDrawer: () => setDrawerOpen(true),
       closeDrawer: () => setDrawerOpen(false),
     }),
-    [state, hydrated, itemCount, addItem, setQuantity, removeItem, clear, drawerOpen],
+    [
+      internal.basket,
+      internal.hydrated,
+      itemCount,
+      addItem,
+      setQuantity,
+      removeItem,
+      clear,
+      drawerOpen,
+    ],
   );
 
   return <BasketContext.Provider value={value}>{children}</BasketContext.Provider>;
