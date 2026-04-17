@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import imageCompression from 'browser-image-compression';
 import { createClient } from '@/lib/supabase/client';
 import { buildUploadPath, PRODUCT_IMAGES_BUCKET } from '@/lib/products/storage';
@@ -38,18 +38,19 @@ export function ImageUploader({
     return arr;
   });
 
-  const emit = useCallback(
-    (nextPrimary: Slot, nextExtras: Slot[]) => {
-      const urls: string[] = [];
-      if (nextPrimary.status === 'uploaded') urls.push(nextPrimary.url);
-      for (const s of nextExtras) if (s.status === 'uploaded') urls.push(s.url);
-      const hasPending =
-        nextPrimary.status === 'uploading' ||
-        nextExtras.some((s) => s.status === 'uploading');
-      onChange(urls, hasPending);
-    },
-    [onChange],
-  );
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  useEffect(() => {
+    const urls: string[] = [];
+    if (primary.status === 'uploaded') urls.push(primary.url);
+    for (const s of extras) if (s.status === 'uploaded') urls.push(s.url);
+    const hasPending =
+      primary.status === 'uploading' || extras.some((s) => s.status === 'uploading');
+    onChangeRef.current(urls, hasPending);
+  }, [primary, extras]);
 
   const handleUpload = useCallback(
     async (file: File, assign: (slot: Slot) => void) => {
@@ -100,19 +101,13 @@ export function ImageUploader({
     [productId],
   );
 
-  const assignPrimary = (slot: Slot) =>
-    setPrimary((_prev) => {
-      const next = slot;
-      emit(next, extras);
-      return next;
-    });
+  const assignPrimary = useCallback((slot: Slot) => setPrimary(slot), []);
 
-  const assignExtra = (index: number) => (slot: Slot) =>
-    setExtras((_prev) => {
-      const next = _prev.map((s, i) => (i === index ? slot : s));
-      emit(primary, next);
-      return next;
-    });
+  const assignExtra = useCallback(
+    (index: number) => (slot: Slot) =>
+      setExtras((prev) => prev.map((s, i) => (i === index ? slot : s))),
+    [],
+  );
 
   return (
     <div className="space-y-4">
