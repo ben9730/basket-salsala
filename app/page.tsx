@@ -62,6 +62,15 @@ export default function Home() {
           </span>
         </div>
       </div>
+
+      <footer className="absolute bottom-4 left-0 right-0 z-10 text-center">
+        <a
+          href="/admin/login"
+          className="text-xs text-slate-400 underline-offset-4 transition hover:text-slate-600 hover:underline"
+        >
+          ניהול
+        </a>
+      </footer>
     </main>
   );
 }

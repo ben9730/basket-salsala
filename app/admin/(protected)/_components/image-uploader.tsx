@@ -117,9 +117,7 @@ export function ImageUploader({
   return (
     <div className="space-y-4">
       <div>
-        <label className="mb-2 block text-sm font-medium">
-          תמונה ראשית <span className="text-red-600">*</span>
-        </label>
+        <label className="mb-2 block text-sm font-medium">תמונה ראשית</label>
         <SlotView
           slot={primary}
           aspect="sm:aspect-[2/1] aspect-square"

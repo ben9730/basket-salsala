@@ -13,8 +13,6 @@ export const productSchema = z.object({
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'מחיר חייב להיות מספר' });
       } else if (n < 0) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'מחיר לא יכול להיות שלילי' });
-      } else if (n % 0.01 >= 0.001) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'מחיר עד שתי ספרות אחרי הנקודה' });
       }
     }),
   description: z
@@ -26,7 +24,6 @@ export const productSchema = z.object({
   is_available: z.boolean(),
   image_urls: z
     .array(z.string().regex(PUBLIC_URL_RE, 'כתובת תמונה לא חוקית'))
-    .min(1, 'יש להעלות לפחות תמונה ראשית')
     .max(5, 'לכל היותר 5 תמונות'),
 });
 
