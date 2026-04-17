@@ -11,6 +11,36 @@ test.describe('admin product CRUD', () => {
     await expect(page.getByRole('link', { name: 'מוצר חדש' }).first()).toBeVisible();
   });
 
+  test('edit product name and price', async ({ page }) => {
+    await loginAsAdmin(page);
+    await page.goto('/admin');
+    await page.getByRole('link', { name: 'ערוך' }).first().click();
+
+    const editedName = 'Edited ' + Date.now();
+    await page.getByLabel('שם המוצר').fill(editedName);
+    await page.getByLabel('מחיר (₪)').fill('123.45');
+    await page.getByRole('button', { name: 'שמור' }).click();
+    await page.waitForURL('**/admin', { timeout: 30000 });
+    await expect(page.getByText(editedName)).toBeVisible();
+  });
+
+  test('delete product', async ({ page }) => {
+    await loginAsAdmin(page);
+    await page.goto('/admin');
+
+    const rowsBefore = await page.locator('ul li').count();
+
+    await page.getByRole('link', { name: 'ערוך' }).first().click();
+    // Open confirm modal
+    await page.getByRole('button', { name: 'מחק' }).first().click();
+    // Use data-testid to unambiguously target the modal submit button
+    await page.locator('[data-testid="confirm-delete-submit"]').click();
+
+    await page.waitForURL('**/admin', { timeout: 30000 });
+    // Row count should have decreased by 1
+    await expect(page.locator('ul li')).toHaveCount(rowsBefore - 1);
+  });
+
   test('create product with primary + one extra image', async ({ page }) => {
     await loginAsAdmin(page);
     await page.goto('/admin/products/new');
