@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type Props = {
   images: string[];
@@ -10,18 +10,11 @@ type Props = {
 
 export function ProductGallery({ images, alt }: Props) {
   const [index, setIndex] = useState(0);
-  const scrollerRef = useRef<HTMLDivElement>(null);
 
   const go = useCallback(
     (next: number) => {
       if (images.length === 0) return;
-      const clamped = (next + images.length) % images.length;
-      setIndex(clamped);
-      const scroller = scrollerRef.current;
-      if (scroller) {
-        const child = scroller.children[clamped] as HTMLElement | undefined;
-        child?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-      }
+      setIndex((next + images.length) % images.length);
     },
     [images.length],
   );
@@ -35,26 +28,6 @@ export function ProductGallery({ images, alt }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, [go, index]);
 
-  useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
-    const onScroll = () => {
-      const children = Array.from(scroller.children) as HTMLElement[];
-      const scrollerMid = scroller.scrollLeft + scroller.clientWidth / 2;
-      const closest = children.reduce(
-        (best, child, i) => {
-          const mid = child.offsetLeft + child.clientWidth / 2;
-          const dist = Math.abs(mid - scrollerMid);
-          return dist < best.dist ? { i, dist } : best;
-        },
-        { i: 0, dist: Number.POSITIVE_INFINITY },
-      );
-      setIndex(closest.i);
-    };
-    scroller.addEventListener('scroll', onScroll, { passive: true });
-    return () => scroller.removeEventListener('scroll', onScroll);
-  }, []);
-
   if (images.length === 0) {
     return (
       <div className="flex aspect-square w-full items-center justify-center rounded-xl bg-background text-muted">
@@ -63,44 +36,44 @@ export function ProductGallery({ images, alt }: Props) {
     );
   }
 
+  const active = images[index];
+
   return (
     <div className="flex w-full flex-col gap-3">
-      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-background">
-        <div
-          ref={scrollerRef}
-          className="absolute inset-0 flex snap-x snap-mandatory overflow-x-auto"
-          style={{ scrollbarWidth: 'none' }}
-        >
-          {images.map((src, i) => (
-            <div
-              key={src}
-              className="relative h-full w-full shrink-0 snap-start"
-              style={{ flex: '0 0 100%' }}
-            >
-              <Image
-                src={src}
-                alt={`${alt} — תמונה ${i + 1}`}
-                fill
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className="object-cover"
-                priority={i === 0}
-              />
-            </div>
-          ))}
-        </div>
+      <div className="aspect-square w-full overflow-hidden rounded-xl bg-background">
+        <Image
+          key={active}
+          src={active}
+          alt={`${alt} — תמונה ${index + 1}`}
+          width={800}
+          height={800}
+          priority={index === 0}
+          className="h-full w-full object-cover"
+        />
       </div>
+
       {images.length > 1 ? (
-        <div className="flex items-center justify-center gap-2">
-          {images.map((_, i) => (
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {images.map((src, i) => (
             <button
-              key={i}
+              key={src}
               type="button"
               onClick={() => go(i)}
               aria-label={`עבור לתמונה ${i + 1}`}
-              className={`h-2 w-2 rounded-full transition-opacity duration-200 ${
-                i === index ? 'bg-foreground' : 'bg-foreground/30'
+              className={`relative h-16 w-16 overflow-hidden rounded-md border-2 transition-opacity duration-200 ${
+                i === index
+                  ? 'border-foreground'
+                  : 'border-transparent opacity-60 hover:opacity-100'
               }`}
-            />
+            >
+              <Image
+                src={src}
+                alt=""
+                width={120}
+                height={120}
+                className="h-full w-full object-cover"
+              />
+            </button>
           ))}
         </div>
       ) : null}

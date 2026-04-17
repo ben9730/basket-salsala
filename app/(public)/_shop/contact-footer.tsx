@@ -38,16 +38,25 @@ export function ContactFooter() {
         {EMAIL ? <span aria-hidden="true">·</span> : null}
         <span>איסוף עצמי ביבנה</span>
       </div>
-      <p className="flex items-center justify-center gap-3 pb-6 text-center text-xs text-muted">
-        <span>© Salsala</span>
-        <span aria-hidden="true">·</span>
+      <div className="flex items-center justify-center gap-4 pb-6 text-xs">
+        <span className="text-muted">© Salsala</span>
         <a
           href="/admin/login"
-          className="underline-offset-4 transition hover:text-foreground hover:underline"
+          className="inline-flex items-center gap-1 font-medium text-blue-600 underline underline-offset-4 transition hover:opacity-80"
         >
+          <LockIcon />
           ניהול
         </a>
-      </p>
+      </div>
     </footer>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
   );
 }
