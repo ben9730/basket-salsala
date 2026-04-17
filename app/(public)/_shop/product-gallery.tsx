@@ -65,26 +65,29 @@ export function ProductGallery({ images, alt }: Props) {
 
   return (
     <div className="flex w-full flex-col gap-3">
-      <div
-        ref={scrollerRef}
-        className="flex w-full snap-x snap-mandatory overflow-x-auto rounded-xl bg-background"
-        style={{ scrollbarWidth: 'none' }}
-      >
-        {images.map((src, i) => (
-          <div
-            key={src}
-            className="relative aspect-square w-full shrink-0 snap-start"
-          >
-            <Image
-              src={src}
-              alt={`${alt} — תמונה ${i + 1}`}
-              fill
-              sizes="(min-width: 1024px) 560px, 100vw"
-              className="object-cover"
-              priority={i === 0}
-            />
-          </div>
-        ))}
+      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-background">
+        <div
+          ref={scrollerRef}
+          className="absolute inset-0 flex snap-x snap-mandatory overflow-x-auto"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {images.map((src, i) => (
+            <div
+              key={src}
+              className="relative h-full w-full shrink-0 snap-start"
+              style={{ flex: '0 0 100%' }}
+            >
+              <Image
+                src={src}
+                alt={`${alt} — תמונה ${i + 1}`}
+                fill
+                sizes="(min-width: 1024px) 560px, 100vw"
+                className="object-cover"
+                priority={i === 0}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       {images.length > 1 ? (
         <div className="flex items-center justify-center gap-2">
