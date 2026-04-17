@@ -54,7 +54,7 @@ export function BasketDrawer() {
         onClick={closeDrawer}
         className="absolute inset-0 bg-foreground/40"
       />
-      <aside className="absolute inset-y-0 left-0 flex h-full w-full flex-col bg-surface shadow-[0_10px_30px_rgba(31,27,23,0.12)] sm:w-[420px]">
+      <aside className="absolute inset-y-0 right-0 flex h-full w-full flex-col bg-surface shadow-[0_10px_30px_rgba(31,27,23,0.12)] sm:w-[420px]">
         <header className="flex items-center justify-between border-b border-[#E8DEC9] px-5 py-4">
           <h2 className="font-display text-xl font-medium">הסל שלי</h2>
           <button

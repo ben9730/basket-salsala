@@ -12,7 +12,7 @@ export function BasketButton() {
       type="button"
       onClick={openDrawer}
       aria-label="פתח/י את הסל"
-      className="fixed bottom-4 left-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-surface shadow-[0_10px_30px_rgba(31,27,23,0.18)] transition-opacity duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="fixed bottom-4 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-surface shadow-[0_10px_30px_rgba(31,27,23,0.18)] transition-opacity duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
       <BasketIcon />
       <span
