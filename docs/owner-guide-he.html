@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>מדריך למנהלת — Salsala</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #FBF6EC;
+    --surface: #FFFFFF;
+    --fg: #1F1B17;
+    --muted: #6B5D52;
+    --primary: #8C4A1F;
+    --accent: #2563EB;
+    --border: #E8DEC9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Heebo', sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 40px 64px;
+    background: var(--bg);
+  }
+  h1, h2, h3 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 500;
+    color: var(--fg);
+    margin: 0 0 12px;
+  }
+  h1 {
+    font-size: 38px;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-size: 24px;
+    margin-top: 40px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 18px;
+    margin-top: 24px;
+  }
+  p { margin: 0 0 12px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
+  .tag {
+    display: inline-block;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+  .cover {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+  }
+  .cover h1 { font-size: 42px; }
+  .cover p { font-size: 16px; color: var(--muted); margin-bottom: 0; }
+  ol { padding-right: 20px; }
+  ul { padding-right: 20px; }
+  li { margin-bottom: 6px; }
+  code, .mono {
+    font-family: Consolas, 'Courier New', monospace;
+    background: var(--border);
+    color: var(--fg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    direction: ltr;
+    display: inline-block;
+  }
+  .box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .box.accent {
+    border-right: 4px solid var(--primary);
+  }
+  .callout {
+    background: #FFF6EB;
+    border: 1px solid #E8C89D;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .callout strong { color: var(--primary); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 14px;
+  }
+  th, td {
+    text-align: right;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface);
+    font-weight: 500;
+    color: var(--muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin: 14px 0;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--surface);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .step-body { flex: 1; }
+  .step-body p { margin: 0; }
+  footer.doc {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 24px 20px; max-width: 100%; }
+    h2 { page-break-after: avoid; }
+    .box, .callout { page-break-inside: avoid; }
+    .step { page-break-inside: avoid; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover">
+    <span class="tag">מדריך למנהלת</span>
+    <h1>Salsala</h1>
+    <p>כל סלסלה נארזת באהבה. איך לנהל את החנות שלך.</p>
+  </div>
+
+  <p class="sub">מדריך קצר שיעזור לך להתחיל: כניסה, הוספת מוצרים, עריכה, ואיך מגיעות הזמנות. יש כל מה שצריך כדי להפעיל את החנות עוד היום.</p>
+
+  <h2>מה זו החנות?</h2>
+  <p>אתר Salsala מציג ללקוחות את כל המוצרים שאת מעלה — עם תמונות, שם, מחיר ותיאור. הלקוח בוחר מה שהוא רוצה, מוסיף לסל, ושולח לך את ההזמנה בוואטסאפ או באימייל. את מקבלת הודעה רגילה ומתאמת איתו איסוף ביבנה.</p>
+  <p><strong>אין תשלום באתר</strong> ואין צורך שהלקוח יירשם — הכל פשוט ככל האפשר.</p>
+
+  <h2>כניסה למערכת הניהול</h2>
+  <div class="box accent">
+    <p><strong>כתובת האתר:</strong><br />
+      <span class="mono">basket-salsala-934kc2ptw-ben-gutmans-projects.vercel.app</span>
+    </p>
+    <p style="margin-top:10px"><strong>כניסה מהירה לניהול:</strong><br />
+      גללי לסוף עמוד הבית ולחצי על <strong>🔒 ניהול</strong> (בכחול, למטה). אפשר גם לגשת ישירות ל־<span class="mono">/admin/login</span>.
+    </p>
+    <p style="margin-top:10px"><strong>פרטי הכניסה שלך:</strong><br />
+      אימייל: <span class="mono">bat.chipli@gmail.com</span><br />
+      סיסמה: <span class="mono">bat2002</span>
+    </p>
+  </div>
+
+  <div class="callout">
+    <strong>טיפ:</strong> שמרי את הדף <span class="mono">/admin/login</span> בסימניות של הדפדפן בטלפון — כניסה בלחיצה אחת בכל פעם.
+  </div>
+
+  <h2>מסך הניהול</h2>
+  <p>אחרי הכניסה את רואה את כל המוצרים ברשימה אחת: תמונה, שם, מחיר, ומצב זמינות. בכל מוצר יש:</p>
+  <ul>
+    <li><strong>ערוך</strong> — פתיחה של העמוד לעריכה מלאה.</li>
+    <li><strong>מחק</strong> — מחיקה (כולל התמונות).</li>
+    <li><strong>זמין / לא זמין</strong> — כפתור להחליף במקום, בלי לעזוב את הרשימה.</li>
+    <li><strong>חצים למעלה ולמטה</strong> — שינוי סדר הצגה. המוצר שלמעלה ברשימה יוצג ראשון ללקוח.</li>
+  </ul>
+  <p>בפינה העליונה של המסך יש:</p>
+  <ul>
+    <li><strong>צפייה בחנות</strong> — קישור לאתר הלקוחות, לראות מה הם רואים.</li>
+    <li><strong>התנתקות</strong> — יציאה מהניהול. (כל עוד לא לוחצים, הכניסה נשמרת.)</li>
+  </ul>
+
+  <h2>הוספת מוצר חדש</h2>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p>במסך הניהול לחצי על <strong>מוצר חדש</strong>.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p>מלאי את השדות:</p>
+      <ul>
+        <li><strong>שם</strong> — איך הלקוחות יראו את המוצר (לדוגמה: "חלה מתוקה", "סלסלת אירוח").</li>
+        <li><strong>מחיר</strong> — בשקלים. אפשר גם מספרים עם נקודה (לדוגמה 42.50).</li>
+        <li><strong>תיאור</strong> — רשות. מקום לספר על המוצר: מה יש בפנים, גודל, מרכיבים מיוחדים.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p>העלי תמונות: <strong>תמונה ראשית חובה</strong> (התמונה הראשונה שהלקוחות רואים), ועד 4 <strong>תמונות נוספות</strong>. את יכולה לצלם מהטלפון ולהעלות ישירות.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p>סמני את המוצר כ-<strong>זמין</strong> (אם הוא ברשימת המבצעים/ההיצע) או <strong>לא זמין</strong> (אם את רוצה לטעון אותו מראש ולהפעיל אחר כך).</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <p>לחצי על <strong>שמור</strong>. המוצר מיד מופיע בחנות ללקוחות (אם סימנת זמין).</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>טיפ לתמונות:</strong> תמונות מרובעות (שצולמו ביחס 1:1) ייראו הכי טוב בכרטיסי המוצרים. אם צילמת אופקי, זה גם בסדר — התמונה תיחתך אוטומטית למרובע.
+  </div>
+
+  <h2>עריכה ומחיקה</h2>
+  <p>ברשימת המוצרים לחצי <strong>ערוך</strong> כדי לפתוח את עמוד המוצר ולשנות שם, מחיר, תיאור או תמונות.</p>
+  <p>בתוך עמוד העריכה יש גם כפתור <strong>מחק</strong> (בפינה). לחיצה פותחת חלון אישור — המחיקה לא ניתנת לשחזור.</p>
+
+  <h2>החלפת זמינות (זמין / לא זמין)</h2>
+  <p>לפעמים אין לך זמן לייצר מוצר מסוים השבוע, או שאת רוצה להשעות אותו זמנית. במקום למחוק ולהקליד אותו שוב:</p>
+  <ul>
+    <li>ברשימה, לחצי על הכפתור <strong>לא זמין</strong> לצד המוצר — הוא מיד נעלם מהחנות ללקוחות אבל נשאר לך בניהול.</li>
+    <li>לחיצה חוזרת על <strong>זמין</strong> מחזירה אותו.</li>
+  </ul>
+
+  <h2>סדר תצוגה</h2>
+  <p>החצים בצד כל מוצר (למעלה / למטה) מזיזים אותו ברשימה. מה שבראש הרשימה — מופיע ראשון ללקוחות. מומלץ לשים בראש מוצרים חדשים או מבצעים.</p>
+
+  <h2>איך מגיעות הזמנות?</h2>
+  <p>כשלקוח לוחץ <strong>שלח/י בוואטסאפ</strong> בסל שלו, את מקבלת הודעת וואטסאפ רגילה מהמספר שלו, בנוסח כזה:</p>
+  <div class="box">
+    שלום! אני מעוניין/ת להזמין:<br /><br />
+    • חלה מתוקה × 2 — ₪24<br />
+    • סלסלת פירות × 1 — ₪85<br /><br />
+    סה"כ: ₪133
+  </div>
+  <p>את עונה לו בוואטסאפ ומסכמים איסוף, תשלום, ומועד.</p>
+  <p>אם הלקוח בחר <strong>שלח/י באימייל</strong> במקום, ההודעה מגיעה למייל שלך (<span class="mono">bat.chipli@gmail.com</span>) בדיוק באותו פורמט.</p>
+
+  <div class="callout">
+    <strong>חשוב:</strong> האתר לא קולט תשלומים ולא שומר היסטוריית הזמנות בשלב זה. כל התיאום עובר דרכך ישירות — כמו שאת רגילה.
+  </div>
+
+  <h2>טיפים של יום-יום</h2>
+  <ul>
+    <li><strong>בלי מוצרים זמינים, הלקוחות יראו הודעה "עדיין אין מוצרים בקטלוג".</strong> אחרי שתוסיפי אפילו מוצר אחד, החנות פעילה.</li>
+    <li>הסיסמה שלך היא <span class="mono">bat2002</span>. כדאי לשמור אותה במקום בטוח ולהחליף אם רוצים.</li>
+    <li>אם משהו נראה מוזר אחרי שינוי, נסי לרענן את הדף (F5 בדפדפן במחשב, משיכה כלפי מטה בטלפון).</li>
+    <li>אפשר להיכנס לניהול מכל מכשיר — מחשב, טאבלט או טלפון.</li>
+  </ul>
+
+  <h2>מה קורה אם משהו נשבר?</h2>
+  <ul>
+    <li><strong>לא זוכרת את הסיסמה?</strong> פני לבן (המפתח) — הוא יוכל לאפס לך אותה.</li>
+    <li><strong>תמונה לא עולה?</strong> בדקי שהקובץ לא גדול מ-3 מגה. אפשר לצלם מחדש בטלפון במצב רגיל (לא HDR).</li>
+    <li><strong>הזמנה לא הגיעה?</strong> ייתכן שהלקוח לא לחץ "שלח" בוואטסאפ/באימייל אחרי שנפתח החלון. כשהכל תקין, ההודעה תגיע כמו כל הודעת וואטסאפ רגילה.</li>
+  </ul>
+
+  <footer class="doc">
+    נשלח באהבה · Salsala · 2026
+  </footer>
+
+</div>
+</body>
+</html>
