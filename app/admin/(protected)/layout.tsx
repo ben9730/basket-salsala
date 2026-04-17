@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
@@ -33,6 +34,26 @@ export default async function ProtectedAdminLayout({
             </span>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-sm text-muted transition-opacity duration-200 hover:opacity-70"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12l2-2 7-7 7 7 2 2" />
+                <path d="M5 10v10a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V10" />
+              </svg>
+              <span>צפייה בחנות</span>
+            </Link>
             <span className="hidden text-sm text-muted sm:inline">
               {user.email}
             </span>
