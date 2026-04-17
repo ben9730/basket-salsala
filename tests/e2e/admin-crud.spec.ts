@@ -41,6 +41,37 @@ test.describe('admin product CRUD', () => {
     await expect(page.locator('ul li')).toHaveCount(rowsBefore - 1);
   });
 
+  test('toggle availability updates the button label', async ({ page }) => {
+    await loginAsAdmin(page);
+    await page.goto('/admin');
+    const firstRow = page.locator('ul > li').first();
+    // Capture current label before click
+    const before = await firstRow.getByRole('button', { name: /סמן כ/ }).textContent();
+    await firstRow.getByRole('button', { name: /סמן כ/ }).click();
+    await page.waitForLoadState('networkidle');
+    const after = await firstRow.getByRole('button', { name: /סמן כ/ }).textContent();
+    expect(after).not.toBe(before);
+  });
+
+  test('move down then move up is identity', async ({ page }) => {
+    await loginAsAdmin(page);
+    await page.goto('/admin');
+
+    const rows = page.locator('ul > li');
+    const count = await rows.count();
+    test.skip(count < 2, 'need at least 2 products to test reorder');
+
+    const firstName = await rows.first().locator('p.font-medium').textContent();
+
+    await rows.first().getByRole('button', { name: 'הזז למטה' }).click();
+    await page.waitForLoadState('networkidle');
+
+    await rows.nth(1).getByRole('button', { name: 'הזז למעלה' }).click();
+    await page.waitForLoadState('networkidle');
+
+    await expect(page.locator('ul > li').first().locator('p.font-medium')).toHaveText(firstName!);
+  });
+
   test('create product with primary + one extra image', async ({ page }) => {
     await loginAsAdmin(page);
     await page.goto('/admin/products/new');

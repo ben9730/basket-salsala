@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { listProducts } from '@/lib/products/queries';
+import { RowActions } from './_components/row-actions';
 
 // Button does not support asChild — render <Link> with button classes directly.
 const btnPrimary =
@@ -40,7 +41,7 @@ export default async function AdminDashboardPage() {
         </Card>
       ) : (
         <ul className="divide-y divide-border">
-          {products.map((p) => (
+          {products.map((p, i) => (
             <li key={p.id} className="flex items-center gap-4 py-4">
               {p.image_urls[0] ? (
                 <img
@@ -60,9 +61,16 @@ export default async function AdminDashboardPage() {
                   לא זמין
                 </span>
               )}
-              <Link href={`/admin/products/${p.id}/edit`} className={btnSecondary}>
-                ערוך
-              </Link>
+              <div className="flex flex-wrap items-center gap-2">
+                <Link href={`/admin/products/${p.id}/edit`} className={btnSecondary}>
+                  ערוך
+                </Link>
+                <RowActions
+                  product={{ id: p.id, is_available: p.is_available }}
+                  isFirst={i === 0}
+                  isLast={i === products.length - 1}
+                />
+              </div>
             </li>
           ))}
         </ul>
