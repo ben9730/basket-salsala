@@ -64,10 +64,10 @@ export function ProductGallery({ images, alt }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory overflow-x-auto rounded-xl bg-background"
+        className="flex w-full snap-x snap-mandatory overflow-x-auto rounded-xl bg-background"
         style={{ scrollbarWidth: 'none' }}
       >
         {images.map((src, i) => (

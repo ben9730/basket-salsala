@@ -15,9 +15,14 @@ export async function ProductGrid() {
           עדיין אין מוצרים בקטלוג
         </p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 min-[430px]:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
           {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <div
+              key={p.id}
+              className="w-full max-w-[320px] min-[430px]:w-[calc(50%-0.5rem)] min-[430px]:max-w-[340px] lg:w-[calc(33.333%-1rem)] lg:max-w-[360px]"
+            >
+              <ProductCard product={p} />
+            </div>
           ))}
         </div>
       )}
