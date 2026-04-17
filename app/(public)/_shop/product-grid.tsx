@@ -19,7 +19,7 @@ export async function ProductGrid() {
           {products.map((p) => (
             <div
               key={p.id}
-              className="w-full max-w-[320px] min-[430px]:w-[calc(50%-0.5rem)] min-[430px]:max-w-[340px] lg:w-[calc(33.333%-1rem)] lg:max-w-[360px]"
+              className="w-[min(100%,320px)] min-[430px]:w-[300px] lg:w-[340px]"
             >
               <ProductCard product={p} />
             </div>
