@@ -1,17 +1,20 @@
 import type { Metadata, Viewport } from 'next';
-import { Heebo, Frank_Ruhl_Libre } from 'next/font/google';
+import { Heebo, Varela_Round } from 'next/font/google';
 import './globals.css';
 
+// Body — Heebo (Hebrew + Latin). Reference uses Nunito Sans, but it has
+// no Hebrew subset; Heebo is the closest clean-sans Hebrew equivalent.
 const heebo = Heebo({
   subsets: ['hebrew', 'latin'],
   variable: '--font-heebo',
   display: 'swap',
 });
 
-const frankRuhl = Frank_Ruhl_Libre({
+// Display — Varela Round (Hebrew + Latin), matches reference rounded headings.
+const varelaRound = Varela_Round({
   subsets: ['hebrew', 'latin'],
-  variable: '--font-frank-ruhl',
-  weight: ['400', '500', '700', '900'],
+  variable: '--font-varela-round',
+  weight: '400',
   display: 'swap',
 });
 
@@ -25,7 +28,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#fffcf7',
+  themeColor: '#f0f7ff',
 };
 
 export default function RootLayout({
@@ -37,7 +40,7 @@ export default function RootLayout({
     <html
       lang="he"
       dir="rtl"
-      className={`${heebo.variable} ${frankRuhl.variable} h-full antialiased`}
+      className={`${heebo.variable} ${varelaRound.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         {children}

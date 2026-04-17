@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/server';
 import { signOut } from './actions';
 
@@ -21,23 +22,24 @@ export default async function ProtectedAdminLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <header className="border-b border-border bg-surface">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-baseline gap-3">
-            <span className="font-display text-lg">{businessName}</span>
-            <span className="text-xs text-neutral-500">ניהול</span>
+            <span className="font-display text-xl text-foreground">
+              {businessName}
+            </span>
+            <span className="text-xs uppercase tracking-wider text-muted">
+              ניהול
+            </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-neutral-600 sm:inline">
+            <span className="hidden text-sm text-muted sm:inline">
               {user.email}
             </span>
             <form action={signOut}>
-              <button
-                type="submit"
-                className="h-11 rounded-md border border-neutral-300 bg-white px-4 text-sm transition-colors hover:bg-neutral-50"
-              >
+              <Button type="submit" variant="secondary" size="md">
                 התנתקות
-              </button>
+              </Button>
             </form>
           </div>
         </div>
