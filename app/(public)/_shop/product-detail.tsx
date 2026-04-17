@@ -18,24 +18,29 @@ export function ProductDetail({ product }: { product: ProductRow }) {
         <BackArrow />
         <span>חזרה לחנות</span>
       </Link>
-      <article className="grid gap-6 pb-8 pt-4 md:grid-cols-2 md:gap-10 md:pb-12">
+      <article className="grid gap-8 pb-12 pt-6 md:grid-cols-2 md:gap-14 md:pb-16 md:pt-8">
         <div className="order-1 md:order-2">
           <ProductGallery images={product.image_urls} alt={product.name} />
         </div>
-        <div className="order-2 flex flex-col gap-5 md:order-1">
-          {!product.is_available ? (
-            <span className="inline-flex w-fit rounded-full bg-[#E8DEC9] px-3 py-1 text-xs text-muted">
+        <div className="order-2 flex flex-col gap-6 md:order-1 md:justify-center">
+          {product.is_available ? (
+            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              זמין להזמנה
+            </span>
+          ) : (
+            <span className="inline-flex w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
               לא זמין
             </span>
-          ) : null}
-          <h1 className="font-display text-4xl font-medium text-foreground">
+          )}
+          <h1 className="font-display text-4xl font-bold leading-tight text-slate-900 sm:text-5xl">
             {product.name}
           </h1>
-          <p className="font-display text-2xl text-muted">
+          <p className="font-display text-3xl font-medium text-blue-600">
             ₪{PRICE_FORMAT.format(product.price)}
           </p>
           {product.description ? (
-            <p className="whitespace-pre-line text-base leading-relaxed text-foreground">
+            <p className="whitespace-pre-line text-base leading-relaxed text-slate-600">
               {product.description}
             </p>
           ) : null}

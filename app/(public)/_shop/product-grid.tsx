@@ -15,11 +15,11 @@ export async function ProductGrid() {
           עדיין אין מוצרים בקטלוג
         </p>
       ) : (
-        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
           {products.map((p) => (
             <div
               key={p.id}
-              className="w-[min(100%,320px)] min-[430px]:w-[300px] lg:w-[340px]"
+              className="w-[min(100%,360px)] min-[430px]:w-[340px] lg:w-[400px]"
             >
               <ProductCard product={p} />
             </div>

@@ -13,26 +13,27 @@ export function ProductCard({ product }: { product: ProductRow }) {
   return (
     <Link
       href={`/products/${product.id}`}
-      className="group block rounded-xl bg-surface shadow-[0_1px_2px_rgba(31,27,23,0.06)] transition-opacity duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="group block overflow-hidden rounded-2xl bg-surface shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(15,23,42,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
-      <div className="relative aspect-square overflow-hidden rounded-t-xl bg-background">
+      <div className="aspect-square w-full overflow-hidden bg-background">
         {primary ? (
           <Image
             src={primary}
             alt={product.name}
-            fill
-            sizes="(min-width: 1024px) 320px, (min-width: 430px) 45vw, 90vw"
-            className="object-cover"
+            width={600}
+            height={600}
+            sizes="(min-width: 1024px) 420px, (min-width: 430px) 50vw, 100vw"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-muted">—</div>
         )}
       </div>
-      <div className="flex flex-col gap-1 px-4 py-3">
-        <span className="font-display text-lg text-foreground">
+      <div className="flex items-baseline justify-between gap-3 px-5 py-4">
+        <span className="font-display text-xl font-medium text-slate-900">
           {product.name}
         </span>
-        <span className="text-sm text-muted">
+        <span className="font-display text-lg font-medium text-blue-600">
           ₪{PRICE_FORMAT.format(product.price)}
         </span>
       </div>
