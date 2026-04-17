@@ -25,8 +25,6 @@ export function buildMessageBody(items: BasketItem[]): string {
     ...lines,
     '',
     `סה"כ: ₪${formatPrice(total)}`,
-    '',
-    'שמי: _____',
   ].join('\n');
 }
 
