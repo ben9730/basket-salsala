@@ -32,9 +32,13 @@ test.describe('admin product CRUD', () => {
 
     await page.getByRole('link', { name: 'ערוך' }).first().click();
     // Open confirm modal
-    await page.getByRole('button', { name: 'מחק' }).first().click();
+    const trigger = page.getByRole('button', { name: 'מחק' }).first();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
     // Use data-testid to unambiguously target the modal submit button
-    await page.locator('[data-testid="confirm-delete-submit"]').click();
+    const submit = page.locator('[data-testid="confirm-delete-submit"]');
+    await submit.waitFor({ state: 'visible', timeout: 5000 });
+    await submit.click();
 
     await page.waitForURL('**/admin', { timeout: 30000 });
     // Row count should have decreased by 1
