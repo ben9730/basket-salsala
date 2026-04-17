@@ -47,3 +47,7 @@ next-env.d.ts
 /playwright/.cache/
 
 .vercel
+
+# Owner guide contains credentials — kept local, not tracked
+docs/owner-guide-he.html
+docs/owner-guide-he.pdf
