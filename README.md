@@ -4,6 +4,8 @@ A customer-facing storefront + admin catalog for a small boutique (Shlomi & Bat-
 
 **Live:** [basket-salsala-934kc2ptw-ben-gutmans-projects.vercel.app](https://basket-salsala-934kc2ptw-ben-gutmans-projects.vercel.app)
 
+**Demo video:** [Watch on YouTube](https://www.youtube.com/watch?v=kgw23AcLVSM)
+
 ---
 
 ## Stack
