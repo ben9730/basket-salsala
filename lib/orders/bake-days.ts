@@ -1,6 +1,6 @@
-// Assumed until the owner confirms (2026-10-22): Friday only, cutoff 20:00 the day before.
-export const BAKE_WEEKDAYS = [5]; // 0 = Sunday
-export const CUTOFF_HOUR = 20;
+// Assumed until the owner confirms (2026-10-22): Sunday-Friday, cutoff 16:00 the day before.
+export const BAKE_WEEKDAYS = [0, 1, 2, 3, 4, 5]; // 0 = Sunday
+export const CUTOFF_HOUR = 16;
 export const CUTOFF_DAYS_BEFORE = 1;
 
 const TZ = 'Asia/Jerusalem';
@@ -46,22 +46,24 @@ function isRealDate(date: string): boolean {
 }
 
 // Cutoff is compared as Israel wall-clock (date + minutes), so DST shifts of the offset never matter.
-export function isOrderable(date: string, now: Date): boolean {
+export function isOrderable(date: string, now: Date, opts?: { fridayOnly?: boolean }): boolean {
   if (!isRealDate(date)) return false;
-  if (!BAKE_WEEKDAYS.includes(toUtc(date).getUTCDay())) return false;
+  const weekday = toUtc(date).getUTCDay();
+  if (!BAKE_WEEKDAYS.includes(weekday)) return false;
+  if (opts?.fridayOnly && weekday !== 5) return false;
   const cur = israelNow(now);
   const cutoffDate = addDays(date, -CUTOFF_DAYS_BEFORE);
   if (cur.date !== cutoffDate) return cur.date < cutoffDate;
   return cur.minutes < CUTOFF_HOUR * 60;
 }
 
-export function upcomingBakeDays(now: Date, count = 4): string[] {
+export function upcomingBakeDays(now: Date, count = 7, opts?: { fridayOnly?: boolean }): string[] {
   const today = israelNow(now).date;
   const out: string[] = [];
-  // Scan a bounded window: at most one bake day per week is possible, plus the cutoff lead.
+  // Scan a bounded window: with fridayOnly there is one day per week, plus the cutoff lead.
   for (let i = 0; out.length < count && i < count * 7 + 14; i++) {
     const d = addDays(today, i);
-    if (isOrderable(d, now)) out.push(d);
+    if (isOrderable(d, now, opts)) out.push(d);
   }
   return out;
 }

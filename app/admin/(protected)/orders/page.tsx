@@ -42,10 +42,10 @@ export default async function DaySheetPage({ searchParams }: { searchParams: Sea
           הזמנות · {formatBakeDay(date)}.{date.slice(0, 4)}
         </h1>
         <div className="flex flex-wrap items-center gap-2 print:hidden">
-          <Link href={`/admin/orders?date=${prev}`} className={linkSecondary} aria-label="יום אפייה קודם">
+          <Link href={`/admin/orders?date=${prev}`} className={linkSecondary} aria-label="יום חלוקה קודם">
             ← {formatBakeDay(prev)}
           </Link>
-          <Link href={`/admin/orders?date=${next}`} className={linkSecondary} aria-label="יום אפייה הבא">
+          <Link href={`/admin/orders?date=${next}`} className={linkSecondary} aria-label="יום חלוקה הבא">
             {formatBakeDay(next)} →
           </Link>
           <form method="get" className="flex items-center gap-2">

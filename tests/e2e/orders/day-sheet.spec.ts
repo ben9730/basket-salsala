@@ -70,21 +70,21 @@ test.describe('defaultDaySheetDate', () => {
   test('Friday daytime (cutoff for it passed yesterday) -> today', () => {
     expect(defaultDaySheetDate(new Date('2026-10-23T09:00:00Z'))).toBe('2026-10-23');
   });
-  test('Thursday 19:59 -> tomorrow', () => {
-    expect(defaultDaySheetDate(new Date('2026-10-22T16:59:00Z'))).toBe('2026-10-23');
+  test('Saturday 15:59 -> tomorrow (Sunday)', () => {
+    expect(defaultDaySheetDate(new Date('2026-10-24T12:59:00Z'))).toBe('2026-10-25');
   });
   // After the cutoff customers can't order for tomorrow, but the owner still needs tomorrow's sheet.
-  test('Thursday 20:00 (after cutoff) -> still tomorrow', () => {
-    expect(defaultDaySheetDate(new Date('2026-10-22T17:00:00Z'))).toBe('2026-10-23');
+  test('Saturday 16:00 (after cutoff) -> still tomorrow (Sunday)', () => {
+    expect(defaultDaySheetDate(new Date('2026-10-24T13:00:00Z'))).toBe('2026-10-25');
   });
-  test('Saturday -> next Friday', () => {
-    expect(defaultDaySheetDate(new Date('2026-10-24T10:00:00Z'))).toBe('2026-10-30');
+  test('Saturday -> Sunday', () => {
+    expect(defaultDaySheetDate(new Date('2026-10-24T10:00:00Z'))).toBe('2026-10-25');
   });
 });
 
 test('adjacentBakeDay', () => {
-  expect(adjacentBakeDay('2026-10-23', 1)).toBe('2026-10-30');
-  expect(adjacentBakeDay('2026-10-23', -1)).toBe('2026-10-16');
-  expect(adjacentBakeDay('2026-10-25', -1)).toBe('2026-10-23'); // from a non-bake day
-  expect(adjacentBakeDay('2026-10-25', 1)).toBe('2026-10-30');
+  expect(adjacentBakeDay('2026-10-23', 1)).toBe('2026-10-25'); // Friday -> Sunday, skips Saturday
+  expect(adjacentBakeDay('2026-10-25', -1)).toBe('2026-10-23'); // Sunday -> Friday
+  expect(adjacentBakeDay('2026-10-24', -1)).toBe('2026-10-23'); // from Saturday
+  expect(adjacentBakeDay('2026-10-24', 1)).toBe('2026-10-25');
 });
