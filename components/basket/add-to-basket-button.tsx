@@ -24,7 +24,7 @@ export function AddToBasketButton({ productId, name, price, disabled }: Props) {
           addItem({ id: productId, name, price });
           openDrawer();
         }}
-        className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-base font-medium text-surface transition-opacity duration-200 hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
+        className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-base font-medium text-surface cursor-pointer transition-opacity duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
       >
         {label}
       </button>

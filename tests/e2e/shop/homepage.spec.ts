@@ -17,5 +17,8 @@ test.describe('homepage', () => {
     const cards = page.locator('#catalog a[href^="/products/"]');
     const count = await cards.count();
     expect(count).toBeGreaterThan(0);
+    await expect(
+      page.locator('#catalog').getByRole('button', { name: 'הוסף לסל' }).first(),
+    ).toBeVisible();
   });
 });
