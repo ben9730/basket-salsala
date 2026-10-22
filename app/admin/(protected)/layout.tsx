@@ -23,7 +23,7 @@ export default async function ProtectedAdminLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-border bg-surface">
+      <header className="border-b border-border bg-surface print:hidden">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-baseline gap-3">
             <span className="font-display text-xl text-foreground">
@@ -65,6 +65,26 @@ export default async function ProtectedAdminLayout({
           </div>
         </div>
       </header>
+
+      <nav
+        aria-label="ניהול"
+        className="border-b border-border bg-surface print:hidden"
+      >
+        <div className="mx-auto flex max-w-6xl gap-1 px-4 sm:px-6">
+          {[
+            { href: '/admin', label: 'מוצרים' },
+            { href: '/admin/orders', label: 'הזמנות' },
+          ].map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="inline-flex min-h-11 items-center px-4 text-sm font-medium text-foreground hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
 
       <main className="flex-1">{children}</main>
     </div>
