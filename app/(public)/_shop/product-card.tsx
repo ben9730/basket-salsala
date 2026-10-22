@@ -42,11 +42,17 @@ export function ProductCard({ product }: { product: ProductRow }) {
           </span>
         </div>
       </Link>
-      <div className="flex flex-col px-5 pb-4">
+      <div className="flex flex-col gap-2 px-5 pb-4">
+        {product.is_friday_only ? (
+          <span className="inline-flex w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+            שישי בלבד
+          </span>
+        ) : null}
         <AddToBasketButton
           productId={product.id}
           name={product.name}
           price={product.price}
+          fridayOnly={product.is_friday_only}
         />
       </div>
     </div>

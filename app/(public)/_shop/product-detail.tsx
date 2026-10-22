@@ -33,6 +33,11 @@ export function ProductDetail({ product }: { product: ProductRow }) {
               לא זמין
             </span>
           )}
+          {product.is_friday_only ? (
+            <span className="inline-flex w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+              שישי בלבד
+            </span>
+          ) : null}
           <h1 className="font-display text-4xl font-bold leading-tight text-slate-900 sm:text-5xl">
             {product.name}
           </h1>
@@ -50,6 +55,7 @@ export function ProductDetail({ product }: { product: ProductRow }) {
               name={product.name}
               price={product.price}
               disabled={!product.is_available}
+              fridayOnly={product.is_friday_only}
             />
           </div>
         </div>

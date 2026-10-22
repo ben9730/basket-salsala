@@ -25,11 +25,31 @@ test.describe('basket flow (mobile)', () => {
     await expect(page.getByText('מספר טלפון לא תקין')).toBeVisible();
 
     await expect(page.getByLabel('יום איסוף')).toBeVisible();
+    // No Friday-only item in the basket, so the picker offers more than Fridays.
+    const dayLabels = await page.getByLabel('יום איסוף').locator('option').allTextContents();
+    expect(dayLabels.some((l) => !l.includes('שישי'))).toBe(true);
     await expect(page.getByLabel('הערה (לא חובה)')).toBeVisible();
 
     await page.getByRole('button', { name: 'הסר מהסל' }).click();
     await expect(
       page.getByText('הסל ריק. הוסיפ/י פריטים כדי להתחיל.'),
     ).toBeVisible();
+  });
+
+  // Seeded through storage so the test doesn't depend on which real products are flagged.
+  test('a Friday-only item limits the pickup picker to Fridays', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'salsala.basket.v1',
+        JSON.stringify({ items: [{ id: 'x', name: 'חלה', price: 10, quantity: 1, fridayOnly: true }] }),
+      );
+    });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'פתח/י את הסל' }).click();
+
+    const dayLabels = await page.getByLabel('יום איסוף').locator('option').allTextContents();
+    expect(dayLabels.length).toBeGreaterThan(0);
+    for (const l of dayLabels) expect(l).toContain('שישי');
+    await expect(page.getByText('בסל יש מוצרים של שישי בלבד, לכן האיסוף ביום שישי')).toBeVisible();
   });
 });

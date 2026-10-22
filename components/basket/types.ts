@@ -3,6 +3,7 @@ export type BasketItem = {
   name: string;
   price: number;
   quantity: number;
+  fridayOnly?: boolean;
 };
 
 export type BasketState = {

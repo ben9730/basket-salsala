@@ -43,7 +43,10 @@ function reducer(state: InternalState, action: Action): InternalState {
       const existing = items.find((i) => i.id === action.item.id);
       const nextItems = existing
         ? items.map((i) =>
-            i.id === existing.id ? { ...i, quantity: i.quantity + 1 } : i,
+            // Re-adding refreshes fridayOnly, so baskets saved before the flag existed pick it up.
+            i.id === existing.id
+              ? { ...i, quantity: i.quantity + 1, fridayOnly: action.item.fridayOnly }
+              : i,
           )
         : [...items, { ...action.item, quantity: 1 }];
       return { ...state, basket: { items: nextItems } };

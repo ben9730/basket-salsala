@@ -30,10 +30,11 @@ export function BasketDrawer() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState('');
   const [pending, setPending] = useState(false);
+  const fridayOnly = state.items.some((i) => i.fridayOnly);
   // Recomputed each time the drawer opens so the cutoff is never stale.
   const bakeDays = useMemo(
-    () => (drawerOpen ? upcomingBakeDays(new Date()) : []),
-    [drawerOpen],
+    () => (drawerOpen ? upcomingBakeDays(new Date(), 7, { fridayOnly }) : []),
+    [drawerOpen, fridayOnly],
   );
   const selectedDate = bakeDays.includes(dueDate) ? dueDate : (bakeDays[0] ?? '');
 
@@ -237,6 +238,11 @@ export function BasketDrawer() {
                     </option>
                   ))}
                 </select>
+                {fridayOnly ? (
+                  <p className="text-sm text-muted">
+                    בסל יש מוצרים של שישי בלבד, לכן האיסוף ביום שישי
+                  </p>
+                ) : null}
                 {errors.dueDate ? <p className="text-sm text-red-700">{errors.dueDate}</p> : null}
               </div>
               <div className="flex flex-col gap-1">
