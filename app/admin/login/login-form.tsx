@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useActionState, useState } from 'react';
 import { Banner } from '@/components/ui/banner';
 import { signIn, type LoginState } from './actions';
@@ -90,6 +91,15 @@ export function LoginForm() {
               {pending ? 'מתחבר...' : 'התחברות'}
             </button>
           </form>
+        </div>
+
+        <div className="mt-6 text-center">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-slate-600 hover:text-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+          >
+            → חזרה לחנות
+          </Link>
         </div>
       </div>
     </main>
