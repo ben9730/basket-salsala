@@ -22,6 +22,7 @@ export const productSchema = z.object({
     .optional()
     .transform((v) => (v === '' ? undefined : v)),
   is_available: z.boolean(),
+  is_friday_only: z.boolean(),
   image_urls: z
     .array(z.string().regex(PUBLIC_URL_RE, 'כתובת תמונה לא חוקית'))
     .max(5, 'לכל היותר 5 תמונות'),
@@ -50,6 +51,7 @@ export function parseProductForm(formData: FormData, id: string): ActionResult<P
     price: Number(formData.get('price')),
     description: formData.get('description') ?? '',
     is_available: formData.get('is_available') === 'on',
+    is_friday_only: formData.get('is_friday_only') === 'on',
     image_urls: imageUrls,
   });
 

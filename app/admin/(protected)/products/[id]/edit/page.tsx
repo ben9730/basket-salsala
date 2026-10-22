@@ -24,6 +24,7 @@ export default async function EditProductPage({ params }: { params: Params }) {
           price: product.price,
           description: product.description ?? undefined,
           is_available: product.is_available,
+          is_friday_only: product.is_friday_only,
           image_urls: product.image_urls,
         }}
         action={updateProduct}

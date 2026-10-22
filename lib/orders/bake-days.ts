@@ -1,5 +1,5 @@
-// Assumed until the owner confirms (2026-10-22): Sunday-Friday, cutoff 16:00 the day before.
-export const BAKE_WEEKDAYS = [0, 1, 2, 3, 4, 5]; // 0 = Sunday
+// Confirmed by the owner (2026-10-22): Monday-Friday, cutoff 16:00 the day before.
+export const BAKE_WEEKDAYS = [1, 2, 3, 4, 5]; // 0 = Sunday
 export const CUTOFF_HOUR = 16;
 export const CUTOFF_DAYS_BEFORE = 1;
 

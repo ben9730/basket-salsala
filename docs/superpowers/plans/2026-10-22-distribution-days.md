@@ -5,14 +5,16 @@
 **Builds on:** `docs/superpowers/plans/2026-10-22-orders.md` (shipped to `staging` as `fa987e6`). Read it and `GLOSSARY.md` first. The new terms are **Distribution day** (code keeps the name `bake-days`) and **Friday-only product**.
 
 **Decisions (design interview Q23–Q28, 2026-10-22):**
-- Distribution days: **Sunday–Friday** (no Shabbat). Assumed until the owner confirms (question 1 in the vault note).
-- Cutoff: **16:00 the day before** each distribution day, so Saturday 16:00 for Sunday. Assumed until she confirms (question 2).
+- Distribution days: **Monday–Friday**. The owner confirmed on 2026-10-22 and changed it from Sunday–Friday.
+- Cutoff: **16:00 the day before** each distribution day, so Sunday 16:00 for Monday. Confirmed.
+- "Profit" = the day's revenue, which the day sheet's "סה״כ" already shows. Profit after ingredient cost is optional, so it's not built.
+- No door delivery: customers always come to collect.
 - Each product gets a **"שישי בלבד"** toggle in the admin product form. She sets it herself on the challahs. Don't guess by name.
 - A basket containing any Friday-only product → the pickup picker offers **only Fridays**, with a one-line hint. The card and product page show a small "שישי בלבד" tag.
 - `place_order()` rejects a Friday-only product on a non-Friday. Admin manual orders stay unrestricted (owner override).
 - Hebrew labels the owner sees say **יום חלוקה**, not "יום אפייה". The customer label "יום איסוף" stays.
 
-**Not in this plan (waiting on the owner):** the "profit" summary (revenue vs. after ingredient cost) and the neighbours' door question. See the vault note `Basket Salsala - שאלות המשך לאחותי (2026-10-22 13:49)`.
+**Not in this plan:** profit after ingredient cost. The owner said it's optional.
 
 **Guardrails (same as the orders plan):** Next.js 16.2.4 (read `node_modules/next/dist/docs/`), no new dependencies, single quotes, **no prettier**, Hebrew RTL, mobile-first, design tokens, `focus-visible` + 44px targets. Don't commit. **Don't touch the live DB:** the orchestrator applies migrations through the Supabase MCP after review. Verify with `npx tsc --noEmit`, `npm run lint`, `npm run build`, and `npx playwright test tests/e2e/shop tests/e2e/orders tests/e2e/smoke.spec.ts`. `.env.local` exists now and points at the real DB, so don't place real orders from tests.
 
@@ -34,7 +36,7 @@ Build agents run on **Sonnet**.
 ## Task 1 — Distribution days + 16:00 cutoff (`mattpocock-skills:tdd`)
 
 `lib/orders/bake-days.ts`:
-- `BAKE_WEEKDAYS = [0, 1, 2, 3, 4, 5]`, `CUTOFF_HOUR = 16`, `CUTOFF_DAYS_BEFORE = 1`. Update the "assumed until the owner confirms" comment.
+- `BAKE_WEEKDAYS = [1, 2, 3, 4, 5]` (first built as Sunday–Friday, then switched after the owner answered), `CUTOFF_HOUR = 16`, `CUTOFF_DAYS_BEFORE = 1`. Update the "assumed until the owner confirms" comment.
 - `upcomingBakeDays(now, count = 7, opts?: { fridayOnly?: boolean })`. When `fridayOnly` is set, return only Fridays (still `count` of them, still past-cutoff filtered).
 - Add `isOrderable(date, now, opts?: { fridayOnly?: boolean })` with the same rule.
 

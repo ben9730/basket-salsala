@@ -9,6 +9,7 @@ export type ProductRow = {
   description: string | null;
   image_urls: string[];
   is_available: boolean;
+  is_friday_only: boolean;
   display_order: number;
   created_at: string;
 };
@@ -17,7 +18,7 @@ export async function listProducts(): Promise<ProductRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, price, description, image_urls, is_available, display_order, created_at')
+    .select('id, name, price, description, image_urls, is_available, is_friday_only, display_order, created_at')
     .order('display_order', { ascending: true })
     .order('created_at', { ascending: true });
 
@@ -29,7 +30,7 @@ export async function getProduct(id: string): Promise<ProductRow> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, price, description, image_urls, is_available, display_order, created_at')
+    .select('id, name, price, description, image_urls, is_available, is_friday_only, display_order, created_at')
     .eq('id', id)
     .maybeSingle();
 
@@ -42,7 +43,7 @@ export async function listAvailableProducts(): Promise<ProductRow[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, price, description, image_urls, is_available, display_order, created_at')
+    .select('id, name, price, description, image_urls, is_available, is_friday_only, display_order, created_at')
     .eq('is_available', true)
     .order('display_order', { ascending: true })
     .order('created_at', { ascending: true });

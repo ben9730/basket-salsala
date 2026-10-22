@@ -94,6 +94,17 @@ export function ProductForm(props: ProductFormProps) {
         <Label htmlFor="is_available">זמין</Label>
       </div>
 
+      <div className="flex items-center gap-2">
+        <input
+          id="is_friday_only"
+          name="is_friday_only"
+          type="checkbox"
+          defaultChecked={initial?.is_friday_only ?? false}
+          className="h-4 w-4"
+        />
+        <Label htmlFor="is_friday_only">שישי בלבד</Label>
+      </div>
+
       <ImageUploader
         productId={productId}
         initialImageUrls={initialUrls}

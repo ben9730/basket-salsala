@@ -32,11 +32,14 @@ export async function placeOrder(input: unknown): Promise<PlaceOrderResult> {
     });
     if (error) {
       const unavailable = /product unavailable/.test(error.message);
+      const fridayOnly = /friday only/.test(error.message);
       return {
         ok: false,
         error: unavailable
           ? 'חלק מהמוצרים כבר לא זמינים, רענן/י את העמוד'
-          : 'שמירת ההזמנה נכשלה, נסו שוב',
+          : fridayOnly
+            ? 'בסל יש מוצרים של שישי בלבד – בחר/י יום שישי'
+            : 'שמירת ההזמנה נכשלה, נסו שוב',
       };
     }
     const row = Array.isArray(data) ? data[0] : data;

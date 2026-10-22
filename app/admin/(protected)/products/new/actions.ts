@@ -30,6 +30,7 @@ export async function createProduct(
     description: parsed.data!.description ?? null,
     image_urls: parsed.data!.image_urls,
     is_available: parsed.data!.is_available,
+    is_friday_only: parsed.data!.is_friday_only,
     display_order: displayOrder,
   });
 

@@ -25,7 +25,7 @@ One product in an order with its quantity, keeping the product's name and price 
 _Avoid_: Item, Row
 
 **Distribution day** (יום חלוקה):
-A day on which customers pick up their orders. Every day except Shabbat. Orders can only be due on a distribution day. (Code still calls these "bake days".)
+A day on which customers pick up their orders: Monday to Friday. Customers always come to collect; there is no delivery. Orders can only be due on a distribution day. (Code still calls these "bake days".)
 _Avoid_: Bake day, Delivery day, Work day
 
 **Friday-only product**:

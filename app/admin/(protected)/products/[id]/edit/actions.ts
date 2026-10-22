@@ -41,6 +41,7 @@ export async function updateProduct(
       description: parsed.data!.description ?? null,
       image_urls: newUrls,
       is_available: parsed.data!.is_available,
+      is_friday_only: parsed.data!.is_friday_only,
     })
     .eq('id', id);
 
