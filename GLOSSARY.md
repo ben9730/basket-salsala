@@ -24,16 +24,20 @@ _Avoid_: Order ID, Reference
 One product in an order with its quantity, keeping the product's name and price as they were when the order was sent.
 _Avoid_: Item, Row
 
-**Bake day**:
-A weekday on which the owner bakes and customers pick up. Orders can only be due on a bake day.
-_Avoid_: Delivery day, Work day
+**Distribution day** (יום חלוקה):
+A day on which customers pick up their orders. Every day except Shabbat. Orders can only be due on a distribution day. (Code still calls these "bake days".)
+_Avoid_: Bake day, Delivery day, Work day
+
+**Friday-only product**:
+A product the owner offers only on Fridays, such as the challahs. An order containing one can only be due on a Friday.
+_Avoid_: Weekend product, Special
 
 **Due date**:
-The bake day on which the customer picks up the order. Chosen by the customer before the cutoff.
+The distribution day on which the customer picks up the order. Chosen by the customer before the cutoff.
 _Avoid_: Order date (that is when it was placed), Delivery date
 
 **Cutoff**:
-The last moment orders are accepted for a given bake day.
+The last moment orders are accepted for a given distribution day: 16:00 the day before.
 _Avoid_: Deadline
 
 **Pickup**:
@@ -61,7 +65,7 @@ The person running the shop who receives, prepares and tracks orders through the
 _Avoid_: Admin (as a person), Seller
 
 **Day sheet**:
-The owner's view of every order due on one bake day: the bake list, each customer's order with its total and paid state, and the day's grand total. Replaces one sheet of her Excel file.
+The owner's view of every order due on one distribution day: the bake list, each customer's order with its total and paid state, and the day's grand total. Replaces one sheet of her Excel file.
 _Avoid_: Daily summary, Report, Dashboard
 
 **Bake list**:
