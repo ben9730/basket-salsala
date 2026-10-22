@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useBasket } from './basket-provider';
 import {
   basketSubtotal,
   buildMailtoUrl,
   buildWhatsAppUrl,
 } from './basket-link-builder';
+import { Input, Textarea } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { formatBakeDay, upcomingBakeDays } from '@/lib/orders/bake-days';
+import { placeOrderSchema } from '@/lib/orders/schema';
+import { placeOrder } from '@/app/(public)/actions';
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
 const CONTACT_EMAIL = process.env.NEXT_PUBLIC_OWNER_EMAIL;
@@ -17,7 +22,67 @@ const PRICE_FORMAT = new Intl.NumberFormat('he-IL', {
 });
 
 export function BasketDrawer() {
-  const { state, drawerOpen, closeDrawer, setQuantity, removeItem } = useBasket();
+  const { state, drawerOpen, closeDrawer, setQuantity, removeItem, clear } = useBasket();
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [note, setNote] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState('');
+  const [pending, setPending] = useState(false);
+  // Recomputed each time the drawer opens so the cutoff is never stale.
+  const bakeDays = useMemo(
+    () => (drawerOpen ? upcomingBakeDays(new Date()) : []),
+    [drawerOpen],
+  );
+  const selectedDate = bakeDays.includes(dueDate) ? dueDate : (bakeDays[0] ?? '');
+
+  async function send(channel: 'wa' | 'mail') {
+    if (pending) return;
+    setFormError('');
+    const parsed = placeOrderSchema.safeParse({
+      name,
+      phone,
+      dueDate: selectedDate,
+      note,
+      items: state.items.map((i) => ({ id: i.id, quantity: i.quantity })),
+    });
+    if (!parsed.success) {
+      const next: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0] ?? 'form');
+        if (!next[key]) next[key] = issue.message;
+      }
+      setErrors(next);
+      return;
+    }
+    setErrors({});
+    setPending(true);
+    try {
+      const result = await placeOrder(parsed.data);
+      if (!result.ok) {
+        setFormError(result.error);
+        return;
+      }
+      const details = {
+        orderNumber: result.orderNumber,
+        name: parsed.data.name,
+        phone: parsed.data.phone,
+        dueDate: parsed.data.dueDate,
+        note: parsed.data.note,
+      };
+      const url =
+        channel === 'wa'
+          ? buildWhatsAppUrl(result.items, WHATSAPP_NUMBER, details)
+          : buildMailtoUrl(result.items, CONTACT_EMAIL, details);
+      clear();
+      if (url) window.location.href = url;
+    } catch {
+      setFormError('שמירת ההזמנה נכשלה, נסו שוב');
+    } finally {
+      setPending(false);
+    }
+  }
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -37,8 +102,6 @@ export function BasketDrawer() {
 
   const items = state.items;
   const total = basketSubtotal(items);
-  const waUrl = buildWhatsAppUrl(items, WHATSAPP_NUMBER);
-  const mailUrl = buildMailtoUrl(items, CONTACT_EMAIL);
   const contactConfigured = Boolean(WHATSAPP_NUMBER && CONTACT_EMAIL);
 
   return (
@@ -124,40 +187,93 @@ export function BasketDrawer() {
         </div>
 
         {items.length > 0 ? (
-          <footer className="border-t border-[#E8DEC9] px-5 py-4">
+          <footer className="max-h-[70vh] overflow-y-auto border-t border-[#E8DEC9] px-5 py-4">
             <div className="mb-4 flex items-baseline justify-between">
               <span className="text-base text-muted">סה&quot;כ</span>
               <span className="font-display text-xl">
                 ₪{PRICE_FORMAT.format(total)}
               </span>
             </div>
+            <div className="mb-4 flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="order-name">שם</Label>
+                <Input
+                  id="order-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  maxLength={80}
+                  aria-invalid={Boolean(errors.name)}
+                />
+                {errors.name ? <p className="text-sm text-red-700">{errors.name}</p> : null}
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="order-phone">טלפון</Label>
+                <Input
+                  id="order-phone"
+                  type="tel"
+                  inputMode="tel"
+                  dir="ltr"
+                  className="text-right"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  autoComplete="tel"
+                  placeholder="05XXXXXXXX"
+                  aria-invalid={Boolean(errors.phone)}
+                />
+                {errors.phone ? <p className="text-sm text-red-700">{errors.phone}</p> : null}
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="order-date">יום איסוף</Label>
+                <select
+                  id="order-date"
+                  value={selectedDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="h-11 w-full rounded-md border border-border bg-surface px-3 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {bakeDays.map((d) => (
+                    <option key={d} value={d}>
+                      {formatBakeDay(d)}
+                    </option>
+                  ))}
+                </select>
+                {errors.dueDate ? <p className="text-sm text-red-700">{errors.dueDate}</p> : null}
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="order-note">הערה (לא חובה)</Label>
+                <Textarea
+                  id="order-note"
+                  className="min-h-16"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  maxLength={500}
+                />
+                {errors.note ? <p className="text-sm text-red-700">{errors.note}</p> : null}
+              </div>
+              {errors.items ? <p className="text-sm text-red-700">{errors.items}</p> : null}
+              {formError ? (
+                <p role="alert" className="text-sm text-red-700">
+                  {formError}
+                </p>
+              ) : null}
+            </div>
             <div className="flex flex-col gap-2">
-              <a
-                href={waUrl ?? '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-disabled={!contactConfigured}
-                onClick={(e) => {
-                  if (!contactConfigured) e.preventDefault();
-                }}
-                className={`flex h-11 items-center justify-center rounded-md bg-primary px-4 text-base font-medium text-surface transition-opacity duration-200 hover:opacity-90 ${
-                  contactConfigured ? '' : 'pointer-events-none opacity-50'
-                }`}
+              <button
+                type="button"
+                disabled={!contactConfigured || pending}
+                onClick={() => send('wa')}
+                className="flex h-11 items-center justify-center rounded-md bg-primary px-4 text-base font-medium text-surface transition-opacity duration-200 hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
               >
                 שלח/י בוואטסאפ
-              </a>
-              <a
-                href={mailUrl ?? '#'}
-                aria-disabled={!contactConfigured}
-                onClick={(e) => {
-                  if (!contactConfigured) e.preventDefault();
-                }}
-                className={`flex h-11 items-center justify-center rounded-md border border-primary px-4 text-base font-medium text-primary transition-opacity duration-200 hover:opacity-70 ${
-                  contactConfigured ? '' : 'pointer-events-none opacity-50'
-                }`}
+              </button>
+              <button
+                type="button"
+                disabled={!contactConfigured || pending}
+                onClick={() => send('mail')}
+                className="flex h-11 items-center justify-center rounded-md border border-primary px-4 text-base font-medium text-primary transition-opacity duration-200 hover:opacity-70 disabled:pointer-events-none disabled:opacity-50"
               >
                 שלח/י באימייל
-              </a>
+              </button>
               {!contactConfigured ? (
                 <p className="text-center text-sm text-muted">
                   הגדרות יצירת קשר חסרות
